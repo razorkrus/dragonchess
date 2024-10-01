@@ -4,8 +4,8 @@ import numpy as np
 import pyautogui
 import win32gui
 import win32con
-import functools
 from strategy import find_best_move
+from myutils import timeit_decorator
 
 
 left, top = (694, 400)
@@ -21,19 +21,6 @@ grid_height = int(y_seris[1] - y_seris[0])
 
 x_midpoints = (x_seris[1:] + x_seris[:-1]) // 2
 y_midpoints = (y_seris[1:] + y_seris[:-1]) // 2
-
-
-def timeit_decorator(func):
-    @functools.wraps(func)
-    def wrapper(*args, **kwargs):
-        start_time = time.time()
-        result = func(*args, **kwargs)
-        end_time = time.time()
-        execution_time = end_time - start_time
-        print(f"Execution time: {execution_time} seconds")
-        return result
-
-    return wrapper
 
 
 @timeit_decorator
