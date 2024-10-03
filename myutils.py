@@ -9,7 +9,8 @@ def timeit_decorator(func):
         result = func(*args, **kwargs)
         end_time = time.time()
         execution_time = end_time - start_time
-        print(f"Execution time: {execution_time} seconds")
+        name = func.__name__
+        print(f"{name} execution time: {execution_time} seconds")
         return result
 
     return wrapper
