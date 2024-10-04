@@ -2,6 +2,7 @@ import pyautogui
 import os
 import time
 import keyboard
+import argparse
 
 
 left, top = 694, 400
@@ -42,26 +43,26 @@ def shot_and_crop(round=0):
     print(f"Round {round} completed.")
 
 
-r = 0
+def main():
+    parser = argparse.ArgumentParser(
+        description="Generate training data for the chess AI."
+    )
+    parser.add_argument("rounds", type=int, help="Counter for the number of rounds.")
+    args = parser.parse_args()
+
+    r = args.rounds
+    print("Ready to capture the screen.")
+
+    while True:
+        if keyboard.is_pressed("c"):
+            shot_and_crop(r)
+            r += 1
+            while keyboard.is_pressed("c"):
+                time.sleep(0.1)
+        if keyboard.is_pressed("q"):
+            break
+        time.sleep(0.1)
 
 
-def capture_screen():
-    global r
-    shot_and_crop(r)
-    time.sleep(1)
-    r += 1
-
-
-def quit_script():
-    print("Quitting script.")
-    os._exit(0)
-
-
-# Set up hotkeys
-keyboard.add_hotkey("c", capture_screen)
-keyboard.add_hotkey("q", quit_script)
-
-print("Press 'c' to capture the screen or 'q' to quit.")
-
-# Keep the script running
-keyboard.wait("q")
+if __name__ == "__main__":
+    main()

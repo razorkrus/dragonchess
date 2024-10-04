@@ -9,9 +9,7 @@ std = torch.tensor([0.2630, 0.2142, 0.2323])
 
 
 # Define transformations for the training and validation sets
-transform = transforms.Compose(
-    [transforms.ToTensor(), transforms.Normalize(mean=mean.tolist(), std=std.tolist())]
-)
+transform = transforms.Compose([transforms.ToTensor()])
 
 # Load the datasets
 train_dataset = datasets.ImageFolder(root="./dataset/train", transform=transform)
@@ -35,7 +33,7 @@ criterion = nn.CrossEntropyLoss()
 optimizer = optim.Adam(model.parameters(), lr=0.0001)
 
 # Training loop
-num_epochs = 10
+num_epochs = 50
 device = torch.device("cuda" if torch.cuda.is_available() else "cpu")
 model.to(device)
 
