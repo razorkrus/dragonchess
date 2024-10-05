@@ -3,30 +3,29 @@ import time
 import numpy as np
 import matplotlib.pyplot as plt
 import torch
-from torch import nn
-from torchvision import datasets, transforms, models
 from myutils import timeit_decorator
+from model_training import model, idx_to_class
 
 time.sleep(3)
 
 # Check for GPU availability
 device = torch.device("cuda" if torch.cuda.is_available() else "cpu")
 
-# Define transformations for the training and validation sets
-transform = transforms.Compose([transforms.ToTensor()])
-train_dataset = datasets.ImageFolder(root="./dataset/train", transform=transform)
+# # Define transformations for the training and validation sets
+# transform = transforms.Compose([transforms.ToTensor()])
+# train_dataset = datasets.ImageFolder(root="./dataset/train", transform=transform)
+#
+# # Get the class-to-index mapping
+# class_to_idx = train_dataset.class_to_idx
+# # Create an index-to-class mapping
+# idx_to_class = {v: k for k, v in class_to_idx.items()}
 
-# Get the class-to-index mapping
-class_to_idx = train_dataset.class_to_idx
-# Create an index-to-class mapping
-idx_to_class = {v: k for k, v in class_to_idx.items()}
-
-# Initialize the model architecture
-model = models.resnet152(weights=None)
-
-# Modify the final layer to match the number of classes in your dataset
-num_classes = len(train_dataset.classes)
-model.fc = nn.Linear(model.fc.in_features, num_classes)
+# # Initialize the model architecture
+# model = models.resnet152(weights=None)
+#
+# # Modify the final layer to match the number of classes in your dataset
+# num_classes = len(train_dataset.classes)
+# model.fc = nn.Linear(model.fc.in_features, num_classes)
 
 # Load the saved state dictionary
 model.load_state_dict(torch.load("resnet152_model.pth", weights_only=True))
@@ -98,4 +97,5 @@ def generate_chessboard():
     return res.view(8, 8).cpu().numpy()
 
 
-print(generate_chessboard())
+if __name__ == "__main__":
+    print(generate_chessboard())

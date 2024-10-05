@@ -14,10 +14,8 @@ transform = transforms.Compose([transforms.ToTensor()])
 # Load the datasets
 train_dataset = datasets.ImageFolder(root="./dataset/train", transform=transform)
 train_loader = DataLoader(train_dataset, batch_size=64, shuffle=True)
-
 # Get the class-to-index mapping
 class_to_idx = train_dataset.class_to_idx
-
 # Create an index-to-class mapping
 idx_to_class = {v: k for k, v in class_to_idx.items()}
 
@@ -32,30 +30,32 @@ model.fc = nn.Linear(model.fc.in_features, num_classes)
 criterion = nn.CrossEntropyLoss()
 optimizer = optim.Adam(model.parameters(), lr=0.0001)
 
-# Training loop
-num_epochs = 50
-device = torch.device("cuda" if torch.cuda.is_available() else "cpu")
-model.to(device)
 
-for epoch in range(num_epochs):
-    model.train()
-    running_loss = 0.0
-    for inputs, labels in train_loader:
-        inputs, labels = inputs.to(device), labels.to(device)
+def main():
+    # Training loop
+    num_epochs = 50
+    device = torch.device("cuda" if torch.cuda.is_available() else "cpu")
+    model.to(device)
 
-        optimizer.zero_grad()
-        outputs = model(inputs)
-        loss = criterion(outputs, labels)
-        loss.backward()
-        optimizer.step()
+    for epoch in range(num_epochs):
+        model.train()
+        running_loss = 0.0
+        for inputs, labels in train_loader:
+            inputs, labels = inputs.to(device), labels.to(device)
 
-        running_loss += loss.item()
+            optimizer.zero_grad()
+            outputs = model(inputs)
+            loss = criterion(outputs, labels)
+            loss.backward()
+            optimizer.step()
 
-    print(f"Epoch [{epoch+1}/{num_epochs}], Loss: {running_loss/len(train_loader)}")
+            running_loss += loss.item()
 
-print("Training complete.")
+        print(f"Epoch [{epoch+1}/{num_epochs}], Loss: {running_loss/len(train_loader)}")
 
-torch.save(model.state_dict(), "resnet152_model.pth")
+    print("Training complete.")
+
+    torch.save(model.state_dict(), "resnet152_model.pth")
 
 
 def sample_test():
@@ -84,3 +84,7 @@ def sample_test():
 
     print(f"Predicted class index: {predicted_idx}")
     print(f"Predicted class label: {predicted_class}")
+
+
+if __name__ == "__main__":
+    main()

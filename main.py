@@ -1,6 +1,5 @@
 import os
 import time
-import cv2
 import numpy as np
 import pyautogui
 import win32gui
@@ -43,6 +42,7 @@ def move_piece(move):
 
 def action():
     chessboard = generate_chessboard()
+    chessboard += 1  # shift the label from 0-5 to 1-6
     move = find_best_move(chessboard)
     move_piece(move)
 
